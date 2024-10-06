@@ -1,0 +1,76 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      /* Basic styling for the form */
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      .form-group { margin-bottom: 15px; }
+      label { display: block; margin-bottom: 5px; }
+      input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
+      button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+      button:hover { background-color: #45a049; }
+    </style>
+  </head>
+  <body>
+    <h2>Data Collection Form</h2>
+    <form id="dataForm">
+      <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+          <option value="">--Select Category--</option>
+          <option value="Category A">Category A</option>
+          <option value="Category B">Category B</option>
+          <option value="Category C">Category C</option>
+        </select>
+      </div>
+      
+      <!-- Add more form fields as needed -->
+      
+      <button type="submit">Submit</button>
+    </form>
+    
+    <div id="status" style="margin-top:20px;"></div>
+    
+    <script>
+      document.getElementById('dataForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const data = {
+          firstName: form.firstName.value,
+          lastName: form.lastName.value,
+          description: form.description.value,
+          category: form.category.value
+          // Add more fields as needed
+        };
+        
+        google.script.run
+          .withSuccessHandler(function(response) {
+            document.getElementById('status').innerHTML = response;
+            form.reset();
+          })
+          .withFailureHandler(function(error) {
+            document.getElementById('status').innerHTML = 'Error: ' + error.message;
+          })
+          .processForm(data);
+      });
+    </script>
+  </body>
+</html>
